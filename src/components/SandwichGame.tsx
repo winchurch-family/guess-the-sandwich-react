@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './SandwichGame.css';
 
 interface Sandwich {
@@ -6,6 +6,14 @@ interface Sandwich {
   name: string;
   image: string;
 }
+
+interface HighScore {
+  name: string;
+  score: number;
+  date: string;
+}
+
+const MAX_HIGH_SCORES = 5;
 
 const allSandwiches: Sandwich[] = [
   {
@@ -62,14 +70,52 @@ const SandwichGame = () => {
     currentSandwiches[Math.floor(Math.random() * 3)].id
   );
   const [message, setMessage] = useState<string>('Pick a sandwich!');
+  const [highScores, setHighScores] = useState<HighScore[]>([]);
+  const [showNameInput, setShowNameInput] = useState(false);
+  const [playerName, setPlayerName] = useState('');
+  const [isNewHighScore, setIsNewHighScore] = useState(false);
+
+  useEffect(() => {
+    // Load high scores from localStorage when component mounts
+    const savedScores = localStorage.getItem('sandwichGameHighScores');
+    if (savedScores) {
+      setHighScores(JSON.parse(savedScores));
+    }
+  }, []);
+
+  const checkHighScore = (currentScore: number) => {
+    if (highScores.length < MAX_HIGH_SCORES || currentScore > highScores[highScores.length - 1]?.score) {
+      setIsNewHighScore(true);
+      setShowNameInput(true);
+    }
+  };
+
+  const saveHighScore = () => {
+    if (!playerName.trim()) return;
+
+    const newHighScore: HighScore = {
+      name: playerName.trim(),
+      score,
+      date: new Date().toLocaleDateString()
+    };
+
+    const newHighScores = [...highScores, newHighScore]
+      .sort((a, b) => b.score - a.score)
+      .slice(0, MAX_HIGH_SCORES);
+
+    setHighScores(newHighScores);
+    localStorage.setItem('sandwichGameHighScores', JSON.stringify(newHighScores));
+    setShowNameInput(false);
+    setPlayerName('');
+  };
 
   const handleSandwichClick = (id: number) => {
-    if (gameOver) return;
+    if (gameOver || showNameInput) return;
     
     if (id === winningId) {
-      setScore(score + 1);
+      const newScore = score + 1;
+      setScore(newScore);
       setMessage('Congratulations! You found the right sandwich! 🎉');
-      // Set up next round after a brief delay
       setTimeout(nextRound, 1500);
     } else {
       const newLives = lives - 1;
@@ -77,6 +123,7 @@ const SandwichGame = () => {
       if (newLives <= 0) {
         setMessage(`Game Over! Final score: ${score} 🏆`);
         setGameOver(true);
+        checkHighScore(score);
       } else {
         setMessage(`Wrong sandwich! ${newLives} ${newLives === 1 ? 'life' : 'lives'} left! 🤔`);
       }
@@ -95,6 +142,7 @@ const SandwichGame = () => {
     setScore(0);
     setLives(5);
     setGameOver(false);
+    setIsNewHighScore(false);
     nextRound();
   };
 
@@ -120,10 +168,46 @@ const SandwichGame = () => {
           </div>
         ))}
       </div>
-      {gameOver && (
-        <button className="reset-button" onClick={resetGame}>
-          Play Again
-        </button>
+      
+      {showNameInput && (
+        <div className="name-input-container">
+          <h2>🎉 New High Score: {score}! 🎉</h2>
+          <input
+            type="text"
+            maxLength={20}
+            placeholder="Enter your name"
+            value={playerName}
+            onChange={(e) => setPlayerName(e.target.value)}
+            className="name-input"
+          />
+          <button className="submit-button" onClick={saveHighScore}>
+            Save Score
+          </button>
+        </div>
+      )}
+
+      {(gameOver && !showNameInput) && (
+        <div className="game-over-container">
+          <button className="reset-button" onClick={resetGame}>
+            Play Again
+          </button>
+          
+          {highScores.length > 0 && (
+            <div className="high-scores">
+              <h2>High Scores</h2>
+              <div className="scores-list">
+                {highScores.map((highScore, index) => (
+                  <div key={index} className="score-entry">
+                    <span className="score-rank">#{index + 1}</span>
+                    <span className="score-name">{highScore.name}</span>
+                    <span className="score-value">{highScore.score}</span>
+                    <span className="score-date">{highScore.date}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );
