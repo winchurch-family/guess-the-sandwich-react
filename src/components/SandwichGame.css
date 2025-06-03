@@ -5,6 +5,27 @@
   text-align: center;
 }
 
+.game-header {
+  margin-bottom: 2rem;
+}
+
+.game-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.score {
+  color: #4CAF50;
+}
+
+.lives {
+  color: #f44336;
+}
+
 .game-message {
   font-size: 1.5rem;
   margin: 1rem 0;
