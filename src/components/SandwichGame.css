@@ -1,0 +1,77 @@
+.sandwich-game {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.game-message {
+  font-size: 1.5rem;
+  margin: 1rem 0;
+  color: #333;
+}
+
+.sandwiches-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.sandwich-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.sandwich-card:hover {
+  transform: translateY(-5px);
+}
+
+.sandwich-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.sandwich-card p {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.sandwich-card.winner {
+  border: 3px solid #4CAF50;
+  animation: winner-pulse 1s infinite;
+}
+
+.reset-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.reset-button:hover {
+  background-color: #45a049;
+}
+
+@keyframes winner-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+  }
+} 
