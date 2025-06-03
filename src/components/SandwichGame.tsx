@@ -73,7 +73,6 @@ const SandwichGame = () => {
   const [highScores, setHighScores] = useState<HighScore[]>([]);
   const [showNameInput, setShowNameInput] = useState(false);
   const [playerName, setPlayerName] = useState('');
-  const [isNewHighScore, setIsNewHighScore] = useState(false);
 
   useEffect(() => {
     // Load high scores from localStorage when component mounts
@@ -85,7 +84,6 @@ const SandwichGame = () => {
 
   const checkHighScore = (currentScore: number) => {
     if (highScores.length < MAX_HIGH_SCORES || currentScore > highScores[highScores.length - 1]?.score) {
-      setIsNewHighScore(true);
       setShowNameInput(true);
     }
   };
@@ -142,7 +140,6 @@ const SandwichGame = () => {
     setScore(0);
     setLives(5);
     setGameOver(false);
-    setIsNewHighScore(false);
     nextRound();
   };
 
