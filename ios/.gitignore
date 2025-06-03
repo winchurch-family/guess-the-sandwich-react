@@ -1,0 +1,37 @@
+# Build generated
+App/build
+App/Pods
+App/output
+App/App/public
+DerivedData
+xcuserdata
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+*.xcworkspace
+!default.xcworkspace
+*.moved-aside
+*.xcuserstate
+*.xcscmblueprint
+
+# Cordova plugins for Capacitor
+capacitor-cordova-ios-plugins
+
+# Generated Config files
+App/App/capacitor.config.json
+App/App/config.xml
+
+# CocoaPods
+Pods/
+*.xcconfig
+Podfile.lock
+
+# App packaging
+*.ipa
+*.dSYM.zip
+*.dSYM
